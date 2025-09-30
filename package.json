@@ -1,0 +1,17 @@
+{
+  "name": "web-dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "nginx-start": "cd C:\\nginx-1.29.1 && start .\\nginx.exe",
+    "nginx-stop": "cd C:\\nginx-1.29.1 && .\\nginx -s stop",
+    "nginx-reload": "cd C:\\nginx-1.29.1 && .\\nginx -s reload",
+    "dev": " npm run nginx-start && npm run start "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
