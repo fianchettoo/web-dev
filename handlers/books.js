@@ -1,26 +1,35 @@
+const url = require('url');
 const { booksData } = require('../data/booksData');
-const { parseBody } = require('../utils/bodyParser');
+const { initI18n, getLanguage } = require('../utils/i18n');
 
 /**
- * Обработчик POST для /books.
+ * Обработчик GET для /books?reader=... с локализацией.
  * @param {http.IncomingMessage} req - Запрос.
  * @param {http.ServerResponse} res - Ответ.
  */
 async function handleBooks(req, res) {
-  const parsedBody = await parseBody(req);
-  const reader = parsedBody.reader || '';
-  const books = booksData[reader] || [];
+  const i18n = initI18n();
+  const lang = getLanguage(req);
+  i18n.changeLanguage(lang);
+
+  const queryObject = url.parse(req.url, true).query;
+  const readerId = queryObject.reader || '';  // ID вроде 'ivanov'
+
+  // Получаем данные по ID и lang (fallback en)
+  const readerData = booksData[readerId]?.[lang] || booksData[readerId]?.['en'] || { name: '', books: [] };
+  const readerName = readerData.name || readerId;  // Локализованное имя
+  const books = readerData.books || [];
 
   let html = `
-    <html>
-      <head><title>Список книг</title></head>
+    <html lang="${lang}">
+      <head><title>${i18n.t('booksHeader', { reader: readerName })}</title></head>
       <body>
-        <h1>Список книг для ${reader}</h1>
+        <h1>${i18n.t('booksHeader', { reader: readerName })}</h1>
         <table border="1">
-          <tr><th>Книга</th></tr>
-          ${books.map(book => `<tr><td>${book}</td></tr>`).join('')}
+          <tr><th>${i18n.t('bookColumn')}</th></tr>
+          ${books.length ? books.map(book => `<tr><td>${book}</td></tr>`).join('') : `<tr><td>${i18n.t('noBooks')}</td></tr>`}
         </table>
-        <a href="/">Назад</a>
+        <a href="/?lang=${lang}">${i18n.t('backLink')}</a>
       </body>
     </html>
   `;

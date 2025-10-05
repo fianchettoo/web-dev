@@ -8,9 +8,9 @@ const { handleBooks } = require('./handlers/books');
  */
 const server = http.createServer(async (req, res) => {
   try {
-    if (req.url === '/' || req.url === '/web-dev/') {
-      await handleHome(res);
-    } else if (req.method === 'POST' && req.url === '/books') {
+    if (req.url === '/' || req.url.startsWith('/?') || req.url === '/web-dev/') {  // Добавь startsWith('/?') для ?lang= без /books
+      await handleHome(req, res);  // Изменено: добавлен req
+    } else if (req.method === 'GET' && req.url.startsWith('/books')) {
       await handleBooks(req, res);
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
