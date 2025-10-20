@@ -1,6 +1,6 @@
 const url = require('url');
 const { booksData } = require('../data/booksData');
-const { initI18n, getLanguage } = require('../utils/i18n');
+const { getTranslation, interpolate, getLanguage } = require('../utils/translations');
 
 /**
  * Обработчик GET для /books?reader=... с локализацией.
@@ -8,28 +8,28 @@ const { initI18n, getLanguage } = require('../utils/i18n');
  * @param {http.ServerResponse} res - Ответ.
  */
 async function handleBooks(req, res) {
-  const i18n = initI18n();
   const lang = getLanguage(req);
-  i18n.changeLanguage(lang);
 
   const queryObject = url.parse(req.url, true).query;
-  const readerId = queryObject.reader || '';  // ID вроде 'ivanov'
+  const readerId = queryObject.reader || '';
 
-  // Получаем данные по ID и lang (fallback en)
   const readerData = booksData[readerId]?.[lang] || booksData[readerId]?.['en'] || { name: '', books: [] };
-  const readerName = readerData.name || readerId;  // Локализованное имя
+  const readerName = readerData.name || readerId;
   const books = readerData.books || [];
+
+  const booksHeaderTemplate = getTranslation(lang, 'booksHeader');
+  const booksHeader = interpolate(booksHeaderTemplate, { reader: readerName });
 
   let html = `
     <html lang="${lang}">
-      <head><title>${i18n.t('booksHeader', { reader: readerName })}</title></head>
+      <head><title>${booksHeader}</title></head>
       <body>
-        <h1>${i18n.t('booksHeader', { reader: readerName })}</h1>
+        <h1>${booksHeader}</h1>
         <table border="1">
-          <tr><th>${i18n.t('bookColumn')}</th></tr>
-          ${books.length ? books.map(book => `<tr><td>${book}</td></tr>`).join('') : `<tr><td>${i18n.t('noBooks')}</td></tr>`}
+          <tr><th>${getTranslation(lang, 'bookColumn')}</th></tr>
+          ${books.length ? books.map(book => `<tr><td>${book}</td></tr>`).join('') : `<tr><td>${getTranslation(lang, 'noBooks')}</td></tr>`}
         </table>
-        <a href="/?lang=${lang}">${i18n.t('backLink')}</a>
+        <a href="/?lang=${lang}">${getTranslation(lang, 'backLink')}</a>
       </body>
     </html>
   `;
