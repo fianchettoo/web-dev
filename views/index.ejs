@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <title><%= translations.title %></title>
+</head>
+<body>
+  <h1><%= translations.title %></h1>
+
+  <form method="GET" action="/books">
+    <label><%= translations.selectLabel %></label>
+    <select name="reader">
+      <option value="ivanov"><%= translations.readers.ivanov %></option>
+      <option value="petrov"><%= translations.readers.petrov %></option>
+      <option value="sidorov"><%= translations.readers.sidorov %></option>
+    </select>
+    <input type="hidden" name="lang" value="<%= lang %>">
+    <button type="submit"><%= translations.button %></button>
+  </form>
+
+  <p>
+    <a href="/session?lang=<%= lang %>">Session / Cookie demo</a>
+  </p>
+</body>
+</html>

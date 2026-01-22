@@ -1,0 +1,17 @@
+<html lang="<%= lang %>">
+<head><title><%= booksHeader %></title></head>
+<body>
+  <h1><%= booksHeader %></h1>
+  <table border="1">
+    <tr><th><%= translations.bookColumn %></th></tr>
+    <% if (books.length) { %>
+      <% books.forEach(function(book) { %>
+        <tr><td><%= book %></td></tr>
+      <% }); %>
+    <% } else { %>
+      <tr><td><%= translations.noBooks %></td></tr>
+    <% } %>
+  </table>
+  <a href="/?lang=<%= lang %>"><%= translations.backLink %></a>
+</body>
+</html>

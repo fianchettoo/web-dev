@@ -1,17 +1,24 @@
+// server.js (обновлённый фрагмент)
 const http = require('http');
 const { handleHome } = require('./handlers/home');
 const { handleBooks } = require('./handlers/books');
 
-/**
- * Создаёт и запускает HTTP-сервер.
- * @param {number} [port=3000] - Порт.
- */
+const { handleSessionForm } = require('./handlers/sessionForm');
+const { handleSessionProcess } = require('./handlers/sessionProcess');
+const { handleSessionDisplay } = require('./handlers/sessionDisplay');
+
 const server = http.createServer(async (req, res) => {
   try {
-    if (req.url === '/' || req.url.startsWith('/?') || req.url === '/web-dev/') {  // Добавь startsWith('/?') для ?lang= без /books
-      await handleHome(req, res);  // Изменено: добавлен req
+    if (req.url === '/' || req.url.startsWith('/?') || req.url === '/web-dev/') {
+      await handleHome(req, res);
     } else if (req.method === 'GET' && req.url.startsWith('/books')) {
       await handleBooks(req, res);
+    } else if (req.method === 'GET' && (req.url === '/session' || req.url.startsWith('/session?'))) {
+      await handleSessionForm(req, res);
+    } else if (req.method === 'GET' && req.url.startsWith('/session/process')) {
+      await handleSessionProcess(req, res);
+    } else if (req.method === 'GET' && req.url.startsWith('/session/display')) {
+      await handleSessionDisplay(req, res);
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end('404 Not Found');
@@ -24,6 +31,8 @@ const server = http.createServer(async (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-server.listen(port, 'localhost', () => {
+const host = '127.0.0.1';
+
+server.listen(port, host, () => {
   console.log(`Node.js server running at http://localhost:${port}`);
 });

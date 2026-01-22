@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Display — Session & Cookie demo</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    table { border-collapse: collapse; width: 60%; }
+    td, th { border: 1px solid #333; padding: 8px; }
+  </style>
+</head>
+<body style="background: <%= color %>;">
+  <h1>Stored data</h1>
+
+  <h2>Cookie values</h2>
+  <table>
+    <tr><th>Cookie name</th><th>Value</th></tr>
+    <tr><td>book.author</td><td><%= authorCookie %></td></tr>
+    <tr><td>page.color</td><td><%= color %></td></tr>
+  </table>
+
+  <h2>Session values (server-side)</h2>
+  <table>
+    <tr><th>Attribute</th><th>Value</th></tr>
+    <tr><td>author (session)</td><td><%= sessionAuthor %></td></tr>
+    <tr><td>counter</td><td><%= sessionCounter %></td></tr>
+    <tr><td>lastVisit</td><td><%= sessionLastVisit %></td></tr>
+  </table>
+
+  <p><a href="/session">Back to input</a> | <a href="/">Home</a></p>
+</body>
+</html>

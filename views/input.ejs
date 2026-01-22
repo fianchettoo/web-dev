@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Input — Session & Cookie demo</title>
+</head>
+<body>
+  <h1>Enter author and page color</h1>
+  <form method="GET" action="/session/process">
+    <label>Author (name): <input type="text" name="author" required></label><br><br>
+    <label>Page color:
+      <select name="color">
+        <option value="white">White</option>
+        <option value="#f8e6e6">Light Red</option>
+        <option value="#e6f8e6">Light Green</option>
+        <option value="#e6e9f8">Light Blue</option>
+      </select>
+    </label><br><br>
+    <button type="submit">Submit</button>
+  </form>
+  <p>Note: author will be saved in a cookie (book.author) and also in server session. Session id stored in HttpOnly cookie SID.</p>
+</body>
+</html>
